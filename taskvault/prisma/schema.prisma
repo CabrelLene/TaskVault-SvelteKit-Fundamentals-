@@ -8,13 +8,16 @@ datasource db {
 }
 
 model User {
-  id        String    @id @default(cuid())
-  email     String    @unique
-  createdAt DateTime  @default(now())
+  id           String   @id @default(cuid())
+  username     String
+  email        String   @unique
+  passwordHash String
+  createdAt    DateTime @default(now())
 
-  sessions  Session[]
-  tasks     Task[]
+  sessions     Session[]
+  tasks        Task[]
 }
+
 
 model Session {
   id        String    @id @default(cuid())
@@ -32,9 +35,15 @@ model Task {
   userId    String
   title     String
   done      Boolean   @default(false)
+  priority  String    @default("normal") // low | normal | high
+  dueDate   DateTime?
   createdAt DateTime  @default(now())
 
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
+  @@index([userId, done])
+  @@index([userId, priority])
+  @@index([userId, dueDate])
 }
+
