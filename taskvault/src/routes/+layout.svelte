@@ -1,11 +1,16 @@
 <script lang="ts">
-	import favicon from '$lib/assets/favicon.svg';
-
-	let { children } = $props();
+  export let data: { user: { id: string; email: string } | null };
 </script>
 
-<svelte:head>
-	<link rel="icon" href={favicon} />
-</svelte:head>
+<nav style="display:flex;gap:12px;align-items:center;padding:12px;border-bottom:1px solid #ddd;">
+  <a href="/tasks">Tasks</a>
+  <span style="margin-left:auto;">
+    {#if data.user}
+      {data.user.email} · <a href="/logout">Logout</a>
+    {/if}
+  </span>
+</nav>
 
-{@render children()}
+<main style="max-width:900px;margin:0 auto;padding:16px;">
+  <slot />
+</main>
